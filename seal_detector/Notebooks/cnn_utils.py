@@ -195,7 +195,7 @@ def display_result_metrics(actual_labels:List[int], predicted_labels:List[int]) 
     """
     # Create confusion matrix
     cm_train = confusion_matrix(actual_labels, predicted_labels)
-    ConfusionMatrixDisplay(confusion_matrix=cm_train).plot()
+    ConfusionMatrixDisplay(confusion_matrix=cm_train, display_labels=["No Seal", "Seal"]).plot()
 
     # Calculate metrics
     accuracy = accuracy_score(actual_labels, predicted_labels)
