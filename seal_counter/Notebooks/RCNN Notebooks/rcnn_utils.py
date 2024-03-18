@@ -8,7 +8,7 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection import fasterrcnn_resnet50_fpn, FasterRCNN_ResNet50_FPN_Weights, fasterrcnn_resnet50_fpn_v2
 from torch.utils.data import  Dataset
 from torchvision import transforms
-from typing import List
+from typing import Dict, List, Tuple
 
 class SealDataset(Dataset):
     def __init__(self, images, targets, transform=transforms.Compose([transforms.ToTensor()])):
@@ -70,6 +70,7 @@ def get_object_detection_model(version, num_classes=2, untrained=False, unfrozen
     model.transform.max_size = size
     return model
 
+
 def decode_prediction(prediction, 
                       score_threshold = 0.8, 
                       nms_iou_threshold = 0.2,
@@ -103,7 +104,19 @@ def decode_prediction(prediction,
         else:
             return (boxes.detach().cpu(), labels.detach().cpu(), scores.detach().cpu())
 
-def get_images_target(img_data, bb_data, threshold=.3):
+
+def get_images_target(img_data:List, bb_data:List, threshold:float=.3) -> Tuple[List, List]:
+    """Returns bounding box target information and corresponding sub-images.
+       Filters out data with seals less than the specified threshold.
+
+    Args:
+        img_data (List): List of sub-images in data set
+        bb_data (List): List containing DataFrames or None. None corresponds to no seal. DataFrames contain seal bounding box information.
+        threshold (float, optional): Threshold to filter out sub-images. Defaults to .3.
+
+    Returns:
+        Tuple[List, List]: Returns sub-images and their corresponding targets
+    """
 
     images = []
     targets = []
@@ -158,20 +171,46 @@ def get_images_target(img_data, bb_data, threshold=.3):
     return images, targets
 
 
-def predict(model, image, device="cpu", transform = transforms.Compose([transforms.ToTensor()])):
+def predict(model, image:np.array, device:str="cpu", transform=transforms.Compose([transforms.ToTensor()])) -> Dict:
+    """Generates a model prediction for a given sub-image
+
+    Args:
+        model (Pytorch model): Model making the predictions
+        image (np.array): Sub-image from which the predictions will be made
+        device (str, optional): Either "cpu" or "cuda". Defaults to "cpu".
+        transform (_type_, optional): Transform applied to the image. Defaults to transforms.Compose([transforms.ToTensor()]).
+
+    Returns:
+        Dict: Dictionary containing model prediction information
+    """
     image = transform(np.array(image)).unsqueeze(0).type(torch.FloatTensor).to(device)
     pred = model(image)[0]
     return pred
 
 
-def detach_pred(pred):
+def detach_pred(pred:Dict) -> Dict:
+    """Move the prediction from the GPU to CPU
+
+    Args:
+        pred (Dict): Prediction on the GPU
+
+    Returns:
+        Dict: Prediction on CPU
+    """
     pred["boxes"] = pred["boxes"].detach().cpu()
     pred["scores"] = pred["scores"].detach().cpu()
     pred["labels"] = pred["labels"].detach().cpu()
     return pred
 
 
-def write_to_latex(df, file_name, long_table=False):
+def write_to_latex(df:pd.DataFrame, file_name:str, long_table:bool=False):
+    """Converts a Pandas DataFrame into latex format for easy copy and pasting.
+
+    Args:
+        df (pd.DataFrame): DataFrame which will be converted
+        file_name (str): Name for the convertex latex file
+        long_table (bool, optional): Whether the table will span multiple pages or not. Defaults to False.
+    """
     f = open(f"{file_name}.txt", "w")
     f.write(df.to_latex(index=False, longtable=long_table))
     f.close()
@@ -215,6 +254,7 @@ def parse_xml(xml) -> pd.DataFrame:
      )
    
    return df
+
 
 def get_bb(in_path:str, xml:List[str]) -> pd.DataFrame:
    """_summary_
