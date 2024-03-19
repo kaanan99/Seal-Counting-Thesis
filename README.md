@@ -22,7 +22,7 @@ The following workflow is applied to aerial beach images:<br>
 When the docker container is run, the data will be copied over from the f35 server into the container.
 [Put docker instructions here]
 
-## Data location
+## Data
 Data is stored on the f35 server at the location `//data2/noses_data/seal_counting_thesis_data`
 
 ### CNN Training Files
@@ -42,7 +42,16 @@ The `Training, Val, and Testing Images` directory contains the full aerial image
 * Validation (32 images)
 * Testing (13 images)
 
-## Contents
+### Pre-trained models
+The final models trained in this thesis are stored in the `TrainedModels` directory. Here are the descriptions for the models:
+* `FullTrainModel2`: CNN trained using TensorFlow.
+* `ImageClassifierPytorch9`: CNN trained using Pytorch.
+* `water_classifier`: Water classifier.
+* `rcnn_extra_data_base_30_10`: ResNetV1 Unfrozen model.
+* `rcnn_trial1_50`: ResNetV1 Frozen model.
+* `rcnn_trial3_50`: ResNetV2 Frozen model.
+
+## Notebooks/Code
 This section describes the contents of each directory.
 
 ### Seal Counter
