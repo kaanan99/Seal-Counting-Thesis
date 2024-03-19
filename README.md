@@ -4,8 +4,9 @@ WORK IN PROGRESS
 torch installation: https://pytorch.org/get-started/locally/
 
 # Seal Counting Thesis
-Part of Kaanan Kharwa's Master Program at California Polytechnic State University, San Luis Obispo. 
-<br><br>The goal of this thesis is the lay the ground work for a tool to automatically count the number of seals from an aerial image of the beach
+Part of Kaanan Kharwa's Master Program at California Polytechnic State University, San Luis Obispo. The goal of this thesis is the lay the ground work for a tool to automatically count the number of seals from an aerial image of the beach (as pictured below).
+![DJI_0037](https://github.com/kaanan99/Seal-Counting-Thesis/assets/55602809/50b74548-ed4a-4dae-93f9-42c030dab546)
+
 ## System Design
 The following workflow is applied to aerial beach images:<br>
 1. **Image Splitting:** Disassemble the original beach aerial image into smaller uniform sub-images <br>
