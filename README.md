@@ -12,15 +12,37 @@ The following workflow is applied to aerial beach images:<br>
 2. **Seal Detection:** Recognize sub-images containing seals and discard those without any <br>
 3. **Seal Counting:** Identify and count seals. The aggregated count across all sub-images produces the final seal count for the aerial beach image.
 
+## How to use this repository
+1. Clone this repository onto the f35 server <br>
+2. Build and run docker container <br>
+3. Open Jupyter Lab<br>
+
 ## Docker
 When the docker container is run, the data will be copied over from the f35 server into the container.
 [Put docker instructions here]
 
 ## Data location
-[Put where the data is stored here]
+Data is stored on the f35 server at the location `//data2/noses_data/seal_counting_thesis_data`
+
+### CNN Training Files
+The following files are used to train the CNN and water detector:
+* `train_bb_data.npy`: Contains bounding box information for training sub-images.
+* `train_images.npy`: Contains traning sub-images.
+* `val_bb_data.npy`: Contains bounding box information for validation sub-images.
+* `val_images.npy`: Contains validation sub-images.
+* `test_bb_data.npy`: Contains bounding box information for testing sub-images.
+* `test_images.npy`: Contains testing sub-images.
+* `water_bb_data.pkl`: Contains bounding box information for where water is in sub-images.
+* `water_images.pkl`: Contains sub-images for training the water classifier.
+
+### Full images and XML files
+The `Training, Val, and Testing Images` directory contains the full aerial images with their corresponding XML files for a specific dataset. The XML file contains all bounding box information for that image. There are 3 sub-directories, one for each dataset:
+* Training (50 images)
+* Validation (32 images)
+* Testing (13 images)
 
 ## Contents
-This section describes the contents of each directory 
+This section describes the contents of each directory.
 
 ### Seal Counter
 This directory contains all code relevant to the seal counter component.
