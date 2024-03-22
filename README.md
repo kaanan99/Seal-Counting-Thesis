@@ -24,7 +24,7 @@ docker image ls
 ```
 If it already exists, there is no need to rebuild. <br> <br>
 
-See if the `seal_counting_container` container already exists by using the following command: <br>
+See if the `seal_thesis_container` container already exists by using the following command: <br>
 ``` bash
 docker container ls
 ```
