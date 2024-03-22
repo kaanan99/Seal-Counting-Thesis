@@ -9,3 +9,4 @@ scikit-image
 scikit-learn
 traitlets==5.6.0
 typing-extensions==4.1.0
+ipywidgets

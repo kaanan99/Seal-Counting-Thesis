@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:1.7.0-cuda11.0-cudnn8-devel
+FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
 
 # Make seal_counting the working directory
 WORKDIR /seal_counting
