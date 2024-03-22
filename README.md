@@ -1,8 +1,3 @@
-
-WORK IN PROGRESS
-
-torch installation: https://pytorch.org/get-started/locally/
-
 # Seal Counting Thesis
 Part of Kaanan Kharwa's Master Program at California Polytechnic State University, San Luis Obispo. The goal of this thesis is the lay the ground work for a tool to automatically count the number of seals from an aerial image of the beach (as pictured below).
 ![DJI_0037](https://github.com/kaanan99/Seal-Counting-Thesis/assets/55602809/50b74548-ed4a-4dae-93f9-42c030dab546)
@@ -19,8 +14,53 @@ The following workflow is applied to aerial beach images:<br>
 3. Open Jupyter Lab<br>
 
 ## Docker
-When the docker container is run, the data will be copied over from the f35 server into the container.
-[Put docker instructions here]
+### First Time Setup
+The Docker image only needs to be built once. Additionally, the container only needs to be run once, as it will keep running on the server until stopped. When the docker container is run, the data will be copied over from the f35 server into the container.
+
+#### See if image and container already exist
+See if the `seal_counting_thesis` image already exists by using the following command: <br>
+```bash
+docker image ls
+```
+If it already exists, there is no need to rebuild. <br> <br>
+
+See if the `seal_counting_container` container already exists by using the following command: <br>
+``` bash
+docker container ls
+```
+If it already exists, there is no need to re-run the container.
+
+#### Building the image
+Use the following command to build the docker image:<br>
+``` bash
+docker build -t seal_counting_thesis .
+```
+
+Use `start_docker.sh` to run the container: <br>
+```bash
+./start_docker.sh
+``` 
+
+#### Saving Files to Host
+Files created within the docker container will not be saved to the server, so they will be lost if the container is stopped. To prevent this you can copy files from a container to the host using the following command: <br>
+```bash
+docker cp seal_thesis_container:path_to_file_on_container path_to_save_to_on_host
+```
+
+Additionally, the `TrainedModels` directory is mounted, so copying trained models into the directory from within the container will save them to the host.
+
+#### Accessing Jupyter lab
+##### Command Line
+Once the container is running, you can access the jupyter lab using port forwarding when you ssh:<br>
+``` bash
+ssh username@f35.csc.calpoly.edu -L 8889:localhost:8889
+```
+
+Then navigate to `localhost:8889` on your web browser.
+
+##### Modify ssh config file
+Alternatively, you can modify your `config` file within the `.ssh` directory to automatically port forward:<br>
+<img width="266" alt="Screenshot 2024-03-22 at 11 41 27 AM" src="https://github.com/kaanan99/Seal-Counting-Thesis/assets/55602809/8a66d1d2-27df-4a74-b6d4-5bd7bab59779">
 
 ## Data
 Data is stored on the f35 server at the location `//data2/noses_data/seal_counting_thesis_data`
@@ -43,13 +83,18 @@ The `Training, Val, and Testing Images` directory contains the full aerial image
 * Testing (13 images)
 
 ### Pre-trained models
-The final models trained in this thesis are stored in the `TrainedModels` directory. Here are the descriptions for the models:
+The final models trained in this thesis are stored in the `TrainedModels` directory.  Here are the descriptions for the models:
 * `FullTrainModel2`: CNN trained using TensorFlow.
 * `ImageClassifierPytorch9`: CNN trained using Pytorch.
 * `water_classifier`: Water classifier.
 * `rcnn_extra_data_base_30_10`: ResNetV1 Unfrozen model.
 * `rcnn_trial1_50`: ResNetV1 Frozen model.
 * `rcnn_trial3_50`: ResNetV2 Frozen model.
+
+If you would like to use them, copy them to their correct locations.<br>
+* CNN and water classifier models belong in `/seal_detector/Models`.
+* RCNN models belong in `/seal_counter/Models`.
+
 
 ## Notebooks/Code
 This section describes the contents of each directory.
